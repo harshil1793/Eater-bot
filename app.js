@@ -17,10 +17,10 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
   
 // Create chat bot
 var connector = new builder.ChatConnector({
-    appId: process.env.MICROSOFT_APP_ID,
-    appPassword: process.env.MICROSOFT_APP_PASSWORD
-    // appId: null,
-    // appPassword: null
+    // appId: process.env.MICROSOFT_APP_ID,
+    // appPassword: process.env.MICROSOFT_APP_PASSWORD
+    appId: 'caaeba19-1014-4335-8fef-fc9bf026661f',
+    appPassword: '6QQeVWnyUSgYvfn7dQo8MEi'
 });
 var bot = new builder.UniversalBot(connector, function (session) {
     // session.send("%s, I heard: %s", session.userData.name, session.message.text);
