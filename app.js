@@ -139,7 +139,7 @@ bot.dialog('rootMenu', [
 
 // Add help dialog
 bot.dialog('help', function (session) {
-    session.send("I'm a simple echo bot.");
+    session.send("help");
 }).triggerAction({ matches: /^help/i });
 
 var returnVals = [];
@@ -172,13 +172,24 @@ bot.dialog('breakfast', [
                                                 
                                                 responseData = data;
                             console.log(responseData);
-                                                
                                                 locations = responseData.location_suggestions;
-                                                for(var i = 0; i < 10; i++){
+                                                var locationLength = locations.length;
+
+                                                console.log("lcaotionssssssss:"+locations.length);
+                                                if(locationLength > 0){
+                                                    if(locationLength >=10){
+                                                        locationLength = 10;
+                                                    }
+                                                for(var i = 0; i < locationLength; i++){
                                                     returnVals[i] = locations[i].name;
                                                     returnCityId[i] = locations[i].id;
                                                 };
                                                 callback(null, returnVals, returnCityId);
+                                            }
+                                            else{
+                                                session.send("Not able to find City. Please enter again");
+                                                session.beginDialog("breakfast");
+                                            }
                                             });
                         }, 
                         function(arg1, callback){
@@ -186,6 +197,10 @@ bot.dialog('breakfast', [
                                 // session.dialogData.returnCityIds = returnVals;
                                 // console.log("IMP dataaaaaaaA: "+session.returnCityId[0]);
                         }]);
+        }
+        else{
+            session.send("Not able to find City. Please enter again");
+            session.beginDialog("breakfast");
         }
     },
     // Step 3
@@ -195,54 +210,44 @@ bot.dialog('breakfast', [
                                 case 0:
                                     // var id = JSON.parse(locations[0].id);
                                     // session.send(id);
-                                    entityId = locations[0].id;
-                                    console.log("IMP dataaaaaaaA: "+locations[0].id);
+                                     entityId = locations[0].id;
                                      session.beginDialog("get_restaurants");
                                     break;
                                 case 1:
-                                    session.send(locations[1].id);
-                                    console.log("IMP dataaaaaaaA: "+locations[0].id);
-                                    // session.beginDialog("shipment");
+                                     entityId = locations[1].id;
+                                     session.beginDialog("get_restaurants");
                                     break;
                                 case 2:
-                                    session.send(locations[2].id);
-                                    console.log("IMP dataaaaaaaA: "+locations[0].id);
-                                    // session.beginDialog("shipment");
+                                     entityId = locations[2].id;
+                                     session.beginDialog("get_restaurants");
                                     break;
                                 case 3:
-                                    session.send(locations[3].id);
-                                    console.log("IMP dataaaaaaaA: "+locations[0].id);
-                                    session.beginDialog("shipment");
+                                     entityId = locations[3].id;
+                                     session.beginDialog("get_restaurants");
                                     break;
                                 case 4:
-                                    session.send(locations[4].id);
-                                    console.log("IMP dataaaaaaaA: "+locations[0].id);
-                                    // session.beginDialog("shipment");
+                                     entityId = locations[4].id;
+                                     session.beginDialog("get_restaurants");
                                     break;
                                 case 5:
-                                    session.send(locations[5].id);
-                                    console.log("IMP dataaaaaaaA: "+locations[0].id);
-                                    // session.beginDialog("shipment");
+                                     entityId = locations[5].id;
+                                     session.beginDialog("get_restaurants");
                                     break;
                                 case 6:
-                                    session.send(locations[6].id);
-                                    console.log("IMP dataaaaaaaA: "+locations[0].id);
-                                    // session.beginDialog("shipment");
+                                     entityId = locations[6].id;
+                                     session.beginDialog("get_restaurants");
                                     break;
                                 case 7:
-                                    session.send(locations[7].id);
-                                    console.log("IMP dataaaaaaaA: "+locations[0].id);
-                                    // session.beginDialog("shipment");
+                                     entityId = locations[7].id;
+                                     session.beginDialog("get_restaurants");
                                     break;
                                 case 8:
-                                    session.send(locations[8].id);
-                                    console.log("IMP dataaaaaaaA: "+locations[0].id);
-                                    // session.beginDialog("shipment");
+                                     entityId = locations[8].id;
+                                     session.beginDialog("get_restaurants");
                                     break;
                                 case 9:
-                                    session.send(locations[9].id);
-                                    console.log("IMP dataaaaaaaA: "+locations[0].id);
-                                    // session.beginDialog("shipment");
+                                     entityId = locations[9].id;
+                                     session.beginDialog("get_restaurants");
                                     break;
                                 default:
                                     session.send("Great!");
@@ -250,7 +255,7 @@ bot.dialog('breakfast', [
                                     break;
                                 }
         }
-        session.endDialog('Hello %s!', results.response.index);
+        // session.endDialog('Hello %s!', results.response.index);
     }
 ]).triggerAction({ matches: /^breakfast/i });
 
@@ -303,6 +308,7 @@ bot.dialog('get_restaurants', [
                         function(callback){
                             var client = new Client();
                             var responseData = [];
+                            var restaurantName =[], restaurantId = [], cuisines = [], thumb = [], address = [], city = [] ;
                             // jsonObject["LocatorRequest"]["OriginAddress"]["AddressKeyFormat"]["AddressLine"] = place.streetAddress;
                             // jsonObject["LocatorRequest"]["OriginAddress"]["AddressKeyFormat"]["PoliticalDivision1"] = place.region;
                             // jsonObject["LocatorRequest"]["OriginAddress"]["AddressKeyFormat"]["PostcodePrimaryLow"] = place.postalCode;
@@ -312,20 +318,46 @@ bot.dialog('get_restaurants', [
                                 // data : JSON.stringify(jsonObject),
                                 headers: {"Content-Type": "application/json"}
                             };
-                            client.get("https://developers.zomato.com/api/v2.1/search?entity_id=280&entity_type=city&collection_id=1&apikey=14fa78b892c33a15a26b6ca9ec09239e", args, function (data, response) {
+                            client.get("https://developers.zomato.com/api/v2.1/search?entity_id="+entityId+"&entity_type=city&collection_id=1&apikey=14fa78b892c33a15a26b6ca9ec09239e", args, function (data, response) {
                             responseData = data;
                             console.log(responseData);
                                                 
-                                                restaurants = responseData.restaurants;
+                                                restaurantData = responseData.restaurants;
                                                 for(var i = 0; i < 10; i++){
-                                                    returnVals[i] = restaurants[i].name;
-                                                    returnCityId[i] = restaurants[i].id;
+                                                    restaurantName[i] = restaurantData[i].restaurant.name;
+                                                    restaurantId[i] = restaurantData[i].restaurant.id;
+                                                    cuisines[i] = restaurantData[i].restaurant.cuisines;
+                                                    thumb[i] = restaurantData[i].restaurant.thumb;
+                                                    address[i] = restaurantData[i].restaurant.location.address;
+                                                    city[i] = restaurantData[i].restaurant.location.city;
                                                 };
-                                                callback(null, returnVals, returnCityId);
+                                                callback(null, restaurantName, restaurantId, cuisines, thumb, address, city);
                                             });
                         }, 
                         function(arg1, callback){
-                                builder.Prompts.choice(session,"Great, choose a city", returnVals, {listStyle:3});
+                                // builder.Prompts.choice(session,"Great, choose a city", returnVals, {listStyle:3});
+                                console.log(returnCityId);
+                                console.log(restaurantData[0].restaurant.name);
+                                var i = 0;
+                               var msg = new builder.Message(session);
+                                    msg.attachmentLayout(builder.AttachmentLayout.carousel)
+
+                                    element = [];
+
+                                    for(var i = 0; i < 10; i++){
+                                        element.push(new builder.HeroCard(session)
+                                            .title(restaurantData[i].restaurant.name)
+                                            .subtitle(restaurantData[i].restaurant.cuisines)
+                                            .text(restaurantData[i].restaurant.location.address+" "+restaurantData[i].restaurant.location.city)
+                                            .images([builder.CardImage.create(session, restaurantData[i].restaurant.thumb)])
+                                            .buttons([
+                                                builder.CardAction.imBack(session, "buy classic white t-shirt", "Buy")
+                                            ]))
+                                    }
+                                    msg.attachments(
+                                        element
+                                    );
+                                    session.send(msg);
                                 // session.dialogData.returnCityIds = returnVals;
                                 // console.log("IMP dataaaaaaaA: "+session.returnCityId[0]);
                         }]);
@@ -354,7 +386,7 @@ bot.dialog('get_restaurants', [
                                 case 3:
                                     session.send(locations[3].id);
                                     console.log("IMP dataaaaaaaA: "+locations[0].id);
-                                    session.beginDialog("shipment");
+                                    // session.beginDialog("shipment");
                                     break;
                                 case 4:
                                     session.send(locations[4].id);
@@ -451,3 +483,7 @@ bot.dialog('search', [
 bot.dialog('Quit', function (session) {
     session.send("Good bye !");
 }).triggerAction({ matches: /^Quit/i });
+
+// bot.dialog('/', function (session) {
+//     session.send("hey How are you?");
+// });
