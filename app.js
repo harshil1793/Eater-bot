@@ -19,8 +19,8 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
 var connector = new builder.ChatConnector({
     // appId: process.env.MICROSOFT_APP_ID,
     // appPassword: process.env.MICROSOFT_APP_PASSWORD
-    appId: 'caaeba19-1014-4335-8fef-fc9bf026661f',
-    appPassword: '6QQeVWnyUSgYvfn7dQo8MEi'
+    appId: '7ee7c6ce-cfe4-401c-817e-76fb4543c85c',
+    appPassword: 'fmw2TxiKSRNjaHVVks3Q3LX'
 });
 var bot = new builder.UniversalBot(connector, function (session) {
     // session.send("%s, I heard: %s", session.userData.name, session.message.text);
