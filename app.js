@@ -2,58 +2,31 @@ var restify = require('restify');
 var builder = require('botbuilder');
 var prompts = require('./prompts');
 var locationDialog = require('botbuilder-location');
-
-
 var Client = require('node-rest-client').Client;
+
 //=========================================================
 // Bot Setup
 //=========================================================
-
-// jsonObject = {
-//     "AccessRequest": {
-//                         "AccessLicenseNumber": "AD245999B2916A98", "UserId": "shaikathaque4",
-//                         "Password": "UPSbot123!"
-//                     },
-//         "LocatorRequest": {
-//                         "Request": {
-//                         "RequestAction": "Locator", "RequestOption": "1", "TransactionReference": {
-//                         "CustomerContext": "Find nearest UPS location" }
-//                     }, 
-//                     "OriginAddress": {
-//                         "PhoneNumber": "1234567891", "AddressKeyFormat": {
-//                         "AddressLine": "11 Times Square", "PoliticalDivision2": "New York City", "PoliticalDivision1": "NY", "PostcodePrimaryLow": "10036", "PostcodeExtendedLow": "", "CountryCode": "US"
-//                         } },
-// 	                "Translate": { "Locale": "en_US"},
-//                     "UnitOfMeasurement": {
-//                         "Code": "MI" },
-//                         "LocationSearchCriteria": { 
-//                             "SearchOption": {
-//                                 "OptionType": { "Code": "01"},
-//                                 "OptionCode": {
-//                                 "Code": "002" }
-//                             },
-//                             "MaximumListSize": "5", "SearchRadius": "5"}
-//         }
-// };
-
 
 // Setup Restify Server
 var server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function () {
    console.log('%s listening to %s', server.name, server.url); 
+   
 });
   
 // Create chat bot
 var connector = new builder.ChatConnector({
     appId: process.env.MICROSOFT_APP_ID,
+    appPassword: process.env.MICROSOFT_APP_PASSWORD
     // appId: null,
     // appPassword: null
-    appPassword: process.env.MICROSOFT_APP_PASSWORD
 });
 var bot = new builder.UniversalBot(connector, function (session) {
     // session.send("%s, I heard: %s", session.userData.name, session.message.text);
     // session.send("Say 'help' or something else...");
-        session.beginDialog('rootMenu');
+    session.send("Welcome to the Eater Bot.");
+    session.beginDialog('rootMenu');
 });
 server.post('/api/messages', connector.listen());
 
@@ -65,43 +38,18 @@ var model = process.env.model;
 var LocationKey = "DefaultLocation";
 var ShippingStyleKey = "Shipping Style";
 var async = require("async");
-// var recognizer = new builder.LuisRecognizer('https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/fd9a76fa-9d70-47e3-828c-33ef63fa039f?subscription-key=9aefdc1486b744049db504427816d708');
+// var recognizer = new builder.LuisRecognizer('https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/fd9a76fa-9d70-47e3-828c-33ef63fa039f?subscription-key=b789414cba8441b89347e424899fa70f');
 
 var entityID = 0;
 
 // bot.recognizer(recognizer);
 // bot.library(locationDialog.createLibrary("Ak2VZoOri8R263-z_IAqqGRcG55S3S5q71H9lSkCsU-1gjnHD1KRUkbeI-zLPp5O"));
 
-
-// Add first run dialog
-bot.dialog('firstRun', [
-    function (session) {
-        // Update versio number and start Prompts
-        // - The version number needs to be updated first to prevent re-triggering 
-        //   the dialog. 
-        session.userData.version = 1.0; 
-        // builder.Prompts.text(session, "Hey! How may I help you today?");
-        session.beginDialog('rootMenu');
-    },
-    function (session, results) {
-        // We'll save the users name and send them an initial greeting. All 
-        // future messages from the user will be routed to the root dialog.
-        session.userData.name = results.response;
-        session.endDialog("Hi %s, say something to me and I'll echo it back.", session.userData.name); 
-    }
-]).triggerAction({
-    onFindAction: function (context, callback) {
-        // Trigger dialog if the users version field is less than 1.0
-        // - When triggered we return a score of 1.1 to ensure the dialog is always triggered.
-        var ver = context.userData.version || 0;
-        var score = ver < 1.0 ? 1.1: 0.0;
-        callback(null, score);
-    },
-    onInterrupted: function (session, dialogId, dialogArgs, next) {
-        // Prevent dialog from being interrupted.
-        session.send("Sorry... We need some information from you first.");
-    }
-});
+//root dialog
+bot.dialog('start', function(session){
+    // session.send("Hey! How may I help you today?");
+    session.beginDialog('rootMenu');
+}).triggerAction({matches: "Greetings"});
 
 // Add root menu dialog
 bot.dialog('rootMenu', [
@@ -120,20 +68,21 @@ bot.dialog('rootMenu', [
                 session.beginDialog('dinner');
                 break;
             case 3:
-                session.beginDialog('dafes');
+                session.beginDialog('cafes');
                 break;
             case 4:
-                session.beginDialog('quit');
+                session.beginDialog('Quit');
                 break;
             default:
                 session.endDialog();
                 break;
         }
-    },
-    function (session) {
-        // Reload menu
-        session.replaceDialog('rootMenu');
     }
+    
+    // function (session) {
+    //     // Reload menu
+    //     session.replaceDialog('rootMenu');
+    // }
 ]).reloadAction('showMenu', null, { matches: /^(menu|back)/i });
 
 
@@ -158,11 +107,6 @@ bot.dialog('breakfast', [
                         function(callback){
                             var client = new Client();
                             var responseData = [];
-                            // jsonObject["LocatorRequest"]["OriginAddress"]["AddressKeyFormat"]["AddressLine"] = place.streetAddress;
-                            // jsonObject["LocatorRequest"]["OriginAddress"]["AddressKeyFormat"]["PoliticalDivision1"] = place.region;
-                            // jsonObject["LocatorRequest"]["OriginAddress"]["AddressKeyFormat"]["PostcodePrimaryLow"] = place.postalCode;
-                            // q="new york";
-                            // console.log(jsonObject);
                             var args = {
                                 // data : JSON.stringify(jsonObject),
                                 headers: {"Content-Type": "application/json"}
@@ -255,7 +199,6 @@ bot.dialog('breakfast', [
                                     break;
                                 }
         }
-        // session.endDialog('Hello %s!', results.response.index);
     }
 ]).triggerAction({ matches: /^breakfast/i });
 
@@ -483,7 +426,3 @@ bot.dialog('search', [
 bot.dialog('Quit', function (session) {
     session.send("Good bye !");
 }).triggerAction({ matches: /^Quit/i });
-
-// bot.dialog('/', function (session) {
-//     session.send("hey How are you?");
-// });
