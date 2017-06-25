@@ -5,9 +5,6 @@ module.exports= {
     cityErrorMessage: 'Not able to find City. Please enter again',
     restaurantErrorMessage: 'Not able to find Restaurant. Please enter again',
     continueMessage: 'would you like to search image? Enter \'yes\'',
-    shipmentSpeedMessage: 'Please choose a shippgit braning speed',
-    shipmentSizeMessage: 'Please enter the size of the package',
-    pickupAddressMessage: 'Where will we pick up your package from?',
-    pickupTimeMessage: 'What time do you want your package to be picked up?',
-    shipAgainMessage: 'Would you like to ship another package?'
+    appId:'7ee7c6ce-cfe4-401c-817e-76fb4543c85c',
+    appPass:'fmw2TxiKSRNjaHVVks3Q3LX'
 }
