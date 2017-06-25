@@ -19,17 +19,14 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
 var connector = new builder.ChatConnector({
     // appId: process.env.MICROSOFT_APP_ID,
     // appPassword: process.env.MICROSOFT_APP_PASSWORD
-    appId: '7ee7c6ce-cfe4-401c-817e-76fb4543c85c',
-    appPassword: 'fmw2TxiKSRNjaHVVks3Q3LX'
+    appId: prompts.appId,
+    appPassword: prompts.appPass
 });
 var bot = new builder.UniversalBot(connector, function (session) {
     session.beginDialog('rootMenu');
 });
 server.post('/api/messages', connector.listen());
 
-//=========================================================
-// Bots Dialogs
-//=========================================================
 
 var model = process.env.model;
 var LocationKey = "DefaultLocation";
@@ -105,11 +102,6 @@ bot.dialog('rootMenu', [
                 break;
         }
     }
-    
-    // function (session) {
-    //     // Reload menu
-    //     session.replaceDialog('rootMenu');
-    // }
 ]).reloadAction('showMenu', null, { matches: /^(menu|back)/i }).triggerAction({ matches: /^menu/i });;
 
 
@@ -166,8 +158,6 @@ bot.dialog('cityList', [
                         }, 
                         function(arg1, callback){
                                 builder.Prompts.choice(session,"Great, choose a city", returnVals, {listStyle:3});
-                                // session.dialogData.returnCityIds = returnVals;
-                                // console.log("IMP dataaaaaaaA: "+session.returnCityId[0]);
                         }]);
         }
         else{
@@ -180,8 +170,6 @@ bot.dialog('cityList', [
         if (results.response) {
         switch (results.response.index) {
                                 case 0:
-                                    // var id = JSON.parse(locations[0].id);
-                                    // session.send(id);
                                      entityId = locations[0].id;
                                      session.beginDialog("get_restaurants");
                                     break;
@@ -237,7 +225,6 @@ bot.dialog('cityList', [
 bot.dialog('get_restaurants', [
     // Step 1
     function (session) {
-            // var restaurants = results.response;
             async.waterfall([
                         function(callback){
                             var client = new Client();
@@ -315,7 +302,6 @@ bot.dialog('Quit', function (session) {
 var qqq;
 //Search
 bot.dialog('search', function (session) {
-        // session.send("Upload a image to search restaurants");
  if (hasImageAttachment(session)) {
         var stream = getImageStreamFromMessage(session.message);
         captionService
@@ -323,9 +309,8 @@ bot.dialog('search', function (session) {
             .then(function (caption) { handleSuccessResponse(session, caption);})
             .catch(function (error) { handleErrorResponse(session, error); });
             
-            
-
-    } else {
+    }
+    else {
         var imageUrl = parseAnchorTag(session.message.text) || (validUrl.isUri(session.message.text) ? session.message.text : null);
         if (imageUrl) {
             captionService
@@ -338,7 +323,6 @@ bot.dialog('search', function (session) {
     }
     console.log("query="+session.userData.q);
 }).triggerAction({ matches: /^search/i });
-
 
 //search by query
 bot.dialog('queryImage',[ 
@@ -392,7 +376,6 @@ bot.dialog('queryImage',[
             session.beginDialog("cityList");
         }
     },
-
 
 function (session, results) {
        if (results.response) {
@@ -519,7 +502,6 @@ bot.dialog('queryRestaurant', [
     }]
 ).triggerAction({ matches: /^queryRestaurant/i });
 
-
 //Image handling methods
 function hasImageAttachment(session) {
     return session.message.attachments.length > 0 &&
@@ -547,12 +529,6 @@ function checkRequiresToken(message) {
     return message.source === 'skype' || message.source === 'msteams';
 }
 
-/**
- * Gets the href value in an anchor element.
- * Skype transforms raw urls to html. Here we extract the href value from the url
- * @param {string} input Anchor Tag
- * @return {string} Url matched or null
- */
 function parseAnchorTag(input) {
     var match = input.match('^<a href=\"([^\"]*)\">[^<]*</a>$');
     if (match && match[1]) {
