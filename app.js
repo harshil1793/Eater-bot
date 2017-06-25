@@ -17,10 +17,10 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
   
 // Create chat bot
 var connector = new builder.ChatConnector({
-    appId: process.env.MICROSOFT_APP_ID,
-    appPassword: process.env.MICROSOFT_APP_PASSWORD
-    // appId: '7ee7c6ce-cfe4-401c-817e-76fb4543c85c',
-    // appPassword: 'fmw2TxiKSRNjaHVVks3Q3LX'
+    // appId: process.env.MICROSOFT_APP_ID,
+    // appPassword: process.env.MICROSOFT_APP_PASSWORD
+    appId: '7ee7c6ce-cfe4-401c-817e-76fb4543c85c',
+    appPassword: 'fmw2TxiKSRNjaHVVks3Q3LX'
 });
 var bot = new builder.UniversalBot(connector, function (session) {
     session.beginDialog('rootMenu');
@@ -120,8 +120,6 @@ bot.dialog('help', function (session) {
 
 var returnVals = [];
 var returnCityId = [];
-
-
 
 //Category List
 bot.dialog('cityList', [
