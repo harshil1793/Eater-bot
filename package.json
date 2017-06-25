@@ -20,7 +20,9 @@
     "async": "^2.4.1",
     "botbuilder": "^3.8.4",
     "botbuilder-location": "^1.1.0",
+    "needle": "^1.6.0",
     "node-rest-client": "^3.1.0",
-    "restify": "^4.3.0"
+    "restify": "^4.3.0",
+    "valid-url": "^1.0.9"
   }
 }
