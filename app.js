@@ -7,9 +7,6 @@ var needle = require('needle'),
     url = require('url'),
     validUrl = require('valid-url'),
     captionService = require('./caption-service');
-//=========================================================
-// Bot Setup
-//=========================================================
 
 // Setup Restify Server
 var server = restify.createServer();
