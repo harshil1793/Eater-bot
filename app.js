@@ -17,10 +17,10 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
   
 // Create chat bot
 var connector = new builder.ChatConnector({
-    // appId: process.env.MICROSOFT_APP_ID,
-    // appPassword: process.env.MICROSOFT_APP_PASSWORD
-    appId: '7ee7c6ce-cfe4-401c-817e-76fb4543c85c',
-    appPassword: 'fmw2TxiKSRNjaHVVks3Q3LX'
+    appId: process.env.MICROSOFT_APP_ID,
+    appPassword: process.env.MICROSOFT_APP_PASSWORD
+    // appId: '7ee7c6ce-cfe4-401c-817e-76fb4543c85c',
+    // appPassword: 'fmw2TxiKSRNjaHVVks3Q3LX'
 });
 var bot = new builder.UniversalBot(connector, function (session) {
     session.beginDialog('rootMenu');
@@ -35,13 +35,13 @@ var model = process.env.model;
 var LocationKey = "DefaultLocation";
 var ShippingStyleKey = "Shipping Style";
 var async = require("async");
-// var recognizer = new builder.LuisRecognizer('https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/fd9a76fa-9d70-47e3-828c-33ef63fa039f?subscription-key=b789414cba8441b89347e424899fa70f');
+var recognizer = new builder.LuisRecognizer('https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/7ee7c6ce-cfe4-401c-817e-76fb4543c85c?subscription-key=b789414cba8441b89347e424899fa70f');
 
 var entityID = 0;
 var ientityID = 0;
 var restaurantID = 0;
 
-// bot.recognizer(recognizer);
+bot.recognizer(recognizer);
 // bot.library(locationDialog.createLibrary("Ak2VZoOri8R263-z_IAqqGRcG55S3S5q71H9lSkCsU-1gjnHD1KRUkbeI-zLPp5O"));
 
 //root dialog
@@ -160,7 +160,7 @@ bot.dialog('cityList', [
                                             }
                                             else{
                                                 session.send(prompts.cityErrorMessage);
-                                                session.beginDialog("breakfast");
+                                                session.beginDialog("cityList");
                                             }
                                             });
                         }, 
