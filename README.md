@@ -5,6 +5,7 @@ Demo: https://webchat.botframework.com/embed/eaterbot?s=cGwVMwjPAFQ.cwA.N6I.ezwL
 
 # What it does
 Eater bot finds the restaurants by image and category.
+
 Step 1:Different categories like breakfast, lunch dinner, and cafes or uploading food image is used to search restaurants.
 Step 2: List of cities are listed based on user input.
 Step 3: Display 10 restaurants based on category/image and city.
