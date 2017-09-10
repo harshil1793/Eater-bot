@@ -4,7 +4,7 @@ module.exports= {
     helpMessage: 'Type \'search\' to search by image.  Type \'menu\' to find the restaurants by city and category.',
     cityErrorMessage: 'Not able to find City. Please enter again',
     restaurantErrorMessage: 'Not able to find Restaurant. Please enter again',
-    continueMessage: 'Would you like to search image? Enter \'yes\'',
-    appId:'7ee7c6ce-cfe4-401c-817e-76fb4543c85c',
-    appPass:'fmw2TxiKSRNjaHVVks3Q3LX'
+    continueMessage: 'would you like to search image? Enter \'yes\'',
+    appId:'7a29064e-70e1-4d20-82c3-0da90f07634a',
+    appPass:'W7yaCkkSQQmOL8EBU7kAgkP'
 }
