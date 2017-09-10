@@ -23,5 +23,13 @@ Trained LUIS to detect the dialog based on natural language.
 ### Images
 
 
-|![Sample Outcome Hero Card](images/outcome-hero-emulator.png)|![Sample Outcome Hero Card](images/outcome-hero-facebook.png)|![Sample Outcome Hero Card](images/outcome-hero-skype.png)|
+|![Welcome Menu Outcome](images/image-welcomeMenu-skype.png)|
+
+|![Cities Outcome](images/image-cities-skype.png)|
+
+|![Restaurants Outcome](images/image-restaurants-skype.png)|
+
+|![Search by image Outcome](images/image-searchByImage-skype.png)|
+
+|![Image result Outcome](images/image-searchedResult-skype.png)|
 
