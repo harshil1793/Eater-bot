@@ -25,9 +25,7 @@ exports.getCaptionFromStream = function (stream) {
                     reject(body);
                 }
                 else {
-                    // resolve(extractCaption(JSON.parse(body)));
                     resolve(extractTags(JSON.parse(body)));
-                    // console.log("stream"+resolve(extractTags(JSON.parse(body))));
                 }
             }));
         }
@@ -55,8 +53,7 @@ exports.getCaptionFromUrl = function (url) {
                     reject(body);
                 }
                 else {
-                    // console.log("url"+body);
-                    // resolve(extractTags(JSON.parse(body)));
+                    console.log("url"+body);
                 }
             });
         }
