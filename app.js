@@ -112,7 +112,6 @@ bot.dialog('cityList', [
 
     // Step 2
     function (session, results) {
-        
         if (results.response) {
             var city = results.response;
             async.waterfall([
@@ -327,35 +326,36 @@ bot.dialog('queryImage',[
         if (results.response) {
             var icity = results.response;
             async.waterfall([
-                        function(callback){
-                            var client = new Client();
-                            var responseData = [];
-                            var args = {
-                                headers: {"Content-Type": "application/json"}
+                function(callback){
+                    var client = new Client();
+                    var responseData = [];
+                    var args = {
+                        headers: {"Content-Type": "application/json"}
+                    };
+                    client.get("https://developers.zomato.com/api/v2.1/cities?q="+icity+"&apikey=14fa78b892c33a15a26b6ca9ec09239e", args, function (data, response) {
+                        responseData = data;
+                        locations = responseData.location_suggestions;
+                        var locationLength = locations.length;
+                        if(locationLength > 0) {
+                            if(locationLength >=10) {
+                                locationLength = 10;
+                            }
+                            for(var i = 0; i < locationLength; i++){
+                                returnVals[i] = locations[i].name;
+                                returnCityId[i] = locations[i].id;
                             };
-                            client.get("https://developers.zomato.com/api/v2.1/cities?q="+icity+"&apikey=14fa78b892c33a15a26b6ca9ec09239e", args, function (data, response) {
-                                responseData = data;
-                                locations = responseData.location_suggestions;
-                                var locationLength = locations.length;
-                                    if(locationLength > 0){
-                                        if(locationLength >=10){
-                                            locationLength = 10;
-                                            }
-                                        for(var i = 0; i < locationLength; i++){
-                                            returnVals[i] = locations[i].name;
-                                            returnCityId[i] = locations[i].id;
-                                        };
-                                        callback(null, returnVals, returnCityId);
-                                    }
-                                    else{
-                                        session.send(prompts.cityErrorMessage);
-                                        session.beginDialog("cityList");
-                                    }
+                            callback(null, returnVals, returnCityId);
+                        }
+                        else{
+                            session.send(prompts.cityErrorMessage);
+                            session.beginDialog("cityList");
+                        }
                             });
                         }, 
-                        function(arg1, callback){
-                                builder.Prompts.choice(session,"Great, choose a city", returnVals, {listStyle:3});
-                        }]);
+                    function(arg1, callback){
+                        builder.Prompts.choice(session,"Great, choose a city", returnVals, {listStyle:3});
+                    }
+            ]);
         }
         else{
             session.send(prompts.cityErrorMessage);
@@ -507,7 +507,7 @@ function getImageStreamFromMessage(message) {
     }
 
     headers['Content-Type'] = attachment.contentType;
-    
+
     return needle.get(attachment.contentUrl, { headers: headers });
 }
 
