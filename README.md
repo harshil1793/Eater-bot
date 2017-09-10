@@ -1,7 +1,7 @@
 # Eater-bot
 Find the best restaurants, and cafés, search by city and image.
 
-Demo: https://webchat.botframework.com/embed/eaterbot?s=cGwVMwjPAFQ.cwA.N6I.ezwLUy0YQ9OqCHxK3lA5MQIQEq8E9DmJZVDFnC5Y9us
+Demo: https://webchat.botframework.com/embed/Eater-Bot?s=beR_2hbk35E.cwA.9tE.3BUQRfDU3AKS88t8DsJcv5QVO1odP-Axi3SD7_MGM1w
 
 # What it does
 Eater bot finds the restaurants by image and category.
